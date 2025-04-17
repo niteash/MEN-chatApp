@@ -1,11 +1,10 @@
 {
   "name": "mongoexpress",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
-  "dev": "nodemon app.js"
+    "dev": "nodemon app.js"
   },
   "keywords": [],
   "author": "",
@@ -18,5 +17,7 @@
     "mongoose": "^8.13.2",
     "sweetalert2": "^11.19.1"
   },
-
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
 }
