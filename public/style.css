@@ -1,0 +1,124 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    background: linear-gradient(to right, #e0f7fa, #e1f5fe);
+    padding: 40px 20px;
+    color: #333;
+}
+
+
+h1 {
+    font-size: 3rem;
+    margin-bottom: 40px;
+    text-align: center;
+    color: #004d99;
+    letter-spacing: 1px;
+}
+
+
+button {
+    background: linear-gradient(135deg, #00bfa5, #00acc1);
+    color: white;
+    border: none;
+    padding: 10px 22px;
+    border-radius: 25px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0, 191, 165, 0.3);
+}
+
+button:hover {
+    background: linear-gradient(135deg, #00897b, #0097a7);
+    transform: translateY(-1px);
+}
+
+/* Chat Card */
+.chat {
+    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(12px);
+    padding: 25px 30px;
+    border-radius: 20px;
+    margin: 30px auto;
+    max-width: 700px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.07);
+    transition: all 0.3s ease;
+}
+
+.chat:hover {
+    transform: scale(1.01);
+}
+
+.chat i {
+    color: #555;
+    font-style: normal;
+    font-weight: 600;
+}
+
+
+.msg-box {
+    background: linear-gradient(135deg, #1565c0, #1e88e5);
+    color: white;
+    padding: 16px 20px;
+    border-radius: 16px;
+    margin: 15px 0;
+    font-size: 1.1rem;
+    line-height: 1.5;
+    box-shadow: 0 4px 15px rgba(21, 101, 192, 0.3);
+}
+
+
+p {
+    font-size: 1rem;
+    margin: 6px 0;
+}
+
+hr {
+    border: none;
+    height: 1px;
+    background: #ddd;
+    margin: 15px 0;
+}
+
+@media (max-width: 768px) {
+    .chat {
+        padding: 20px;
+        border-radius: 16px;
+        max-width: 90%;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    button {
+        padding: 8px 18px;
+        font-size: 0.9rem;
+    }
+
+    .msg-box {
+        font-size: 1rem;
+        padding: 12px 15px;
+    }
+}
+
+.chat-container {
+    display: flex;
+    flex-direction: rclow;
+    flex-wrap: wrap;
+    overflow-x: auto;
+    padding: 10px;
+}
+
+.chat {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    width: 300px;
+}

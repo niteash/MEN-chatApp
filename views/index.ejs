@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mini WhatsApp</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>All Chats</h1>
+
+    <form method="GET" action="/chats/new" >
+        <button>New Chat</button>
+    </form>
+    <br>
+<div class="chat-container">
+
+<% for(let chat of chats){ %>
+    <div class="chat">
+        <p>From : <i><%= chat.from %></i></p>
+        <div class="msg-box">
+        <p>Message : <%= chat.message %></p>
+        <form method="GET" action="/chats/<%= chat._id %>/edit">
+            <button>Edit</button>
+        </form>
+
+        <br>
+
+        <form method="post" action="/chats/<%= chat._id %>/?_method=DELETE">
+            <button onclick="confirmDelete('<%= chat.id %>')">Delete</button>
+        </form>
+        </div>
+        <p>To : <i><%= chat.to %></i></p>
+        <hr>
+        <p> Chat created Time :  <%= chat.created_at.toString().split(" ")[4] %> </p>
+        <p> Chat created Date :  <%= chat.created_at.toString().split(" ").slice(0,4).join("-") %></p>
+    </div>
+    <br>
+
+<% }%>
+</div>
+
+<script src="./app.ejs"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</body>
+</html>
+
+
+ 
