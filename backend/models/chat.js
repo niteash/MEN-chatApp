@@ -12,11 +12,13 @@ const chatSchema = new mongoose.Schema({
     },
     message : {
         type : String,
-        maxLength : 50
+        maxLength : 50,
+        required : true
     },
     created_at : {
         type : Date,
-        required : true
+        required : true,
+        default : Date.now
 
     }
 

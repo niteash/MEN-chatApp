@@ -1,97 +1,80 @@
 const express = require('express');
 const app = express();
 const path = require('path');
-const methodOverride = require('method-override')
-
+const methodOverride = require('method-override');
 const mongoose = require('mongoose');
 const Chat = require('./models/chat');
+require('dotenv').config();
 
-main().then((res)=>{
-    console.log('Connection successful!')
-}).catch(err => console.log(err));
+// DB connection
+mongoose.connect(process.env.MONGO_URL)
+  .then(() => console.log("DB connected"))
+  .catch(err => console.log(err));
 
-async function main() {
-  await mongoose.connect('mongodb://127.0.0.1:27017/whatsapp');
+// Use PORT from .env or default to 3000
+const PORT = process.env.PORT || 3000;
 
-}
-
+// View engine
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-app.use(express.static(path.join(__dirname,'..','public'))); //for accessing css
-app.use(express.urlencoded({extended:true})); //for passing the POST data from req.body 
-app.use(methodOverride('_method'))
 
-app.get('/', (req, res)=>{
-   res.render('home.ejs')
-})
+// Middleware
+app.use(express.static(path.join(__dirname, '..', 'public')));
+app.use(express.urlencoded({ extended: true }));
+app.use(methodOverride('_method'));
 
-app.listen(8080,()=>{
-    console.log(`The server is listen at port 8080`)
-})
+// Home route
+app.get('/', (req, res) => {
+  res.render('home.ejs');
+});
 
-//index route
+// Index route
+app.get('/chats', async (req, res) => {
+  const chats = await Chat.find();
+  res.render('index.ejs', { chats });
+});
 
-app.get('/chats', async (req,res)=>{
-   let chats = await Chat.find();
-//    console.log(chats)
-   res.render('./index.ejs',{chats})
-})
-//New Route
-app.get('/chats/new', (req,res)=>{
-    res.render("new.ejs")
-})
+// New chat route
+app.get('/chats/new', (req, res) => {
+  res.render('new.ejs');
+});
 
-//POST route
+// Create chat
+app.post('/chats', async (req, res) => {
+    try {
+      const { from, to, message } = req.body;
+      const newChat = new Chat({ from, to, message, created_at: new Date() });
+      await newChat.save();
+      res.redirect('/chats');
+    } catch (err) {
+      console.error("Chat Creation Error:", err);
+      res.status(500).send("Error creating chat");
+    }
+  });
 
-app.post ('/chats', (req,res)=>{
-    let {from,to,message} = req.body;
-    let newChat = new Chat({
-        from : from,
-        to : to,
-        message : message,
-        created_at : new Date()
-    });
+// Edit chat route
+app.get('/chats/:id/edit', async (req, res) => {
+  const { id } = req.params;
+  const chat = await Chat.findById(id);
+  res.render('edit.ejs', { chat });
+});
 
-    newChat.save().then((res)=>{
-        console.log('Chat was saved')
-    }).catch((err)=>{console.log(err)});
+// Update chat
+app.put('/chats/:id', async (req, res) => {
+  const { id } = req.params;
+  const { message: newMsg } = req.body;
+  await Chat.findByIdAndUpdate(id, { message: newMsg }, { runValidators: true, new: true });
+  res.redirect('/chats');
+});
 
-    res.redirect('/chats')
-})
+// Delete chat
+app.delete('/chats/:id', async (req, res) => {
+  const { id } = req.params;
+  await Chat.findByIdAndDelete(id);
+  res.redirect('/chats');
+});
 
-//edit route
-
-app.get('/chats/:id/edit', async (req, res)=>{
-    let {id} = req.params;
-    let chat = await Chat.findById(id);
-
-    res.render('edit.ejs', {chat})
-})
-
-//PUT (Update) route
-
-app.put("/chats/:id", async(req, res)=>{
-    let {id} = req.params;
-    let {message : newMsg} = req.body;
-
-
-
-    let updatedChat = await Chat.findByIdAndUpdate(
-        id, 
-        {message : newMsg},
-         {runValidators : true, new : true},
-          );
-    console.log(updatedChat);
-    res.redirect('/chats')
-})
-
-//DELETE Route
-
-
-app.delete ('/chats/:id', async (req, res)=>{
-    let {id}= req.params;
-    let chatDeleted = await Chat.findByIdAndDelete(id);
-
-    console.log(chatDeleted)
-    res.redirect('/chats')
-}) 
+// Start server
+app.listen(PORT, () => {
+  console.log(`Server is listening on port ${PORT}`);
+});
