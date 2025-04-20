@@ -12,7 +12,7 @@ const chatSchema = new mongoose.Schema({
     },
     message : {
         type : String,
-        maxLength : 50,
+        maxLength : 200,
         required : true
     },
     created_at : {
