@@ -17,13 +17,13 @@ async function main() {
 
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-app.use(express.static(path.join(__dirname,'public'))); //for accessing css
+app.use(express.static(path.join(__dirname,'..','public'))); //for accessing css
 app.use(express.urlencoded({extended:true})); //for passing the POST data from req.body 
 app.use(methodOverride('_method'))
 
-// app.get('/', (req, res)=>{
-//     res.send("The server is working")
-// })
+app.get('/', (req, res)=>{
+   res.render('home.ejs')
+})
 
 app.listen(8080,()=>{
     console.log(`The server is listen at port 8080`)
